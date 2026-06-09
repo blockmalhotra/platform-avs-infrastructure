@@ -1,4 +1,5 @@
 graph TD
-    O --> K
-    K --> P
-    K --> G
+    O[AVS Operator Container] --> K[K8s Deployment + Service]
+    K --> P[Prometheus]
+    K --> G[Grafana]
+    K -->|integrate| V[Validator Ops Platform]
