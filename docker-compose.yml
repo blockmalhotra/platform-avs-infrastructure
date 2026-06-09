@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  avs-operator:
+    image: avs-operator
+    ports: ["8080:8080"]
+  prometheus:
+    image: prom/prometheus
+  grafana:
+    image: grafana/grafana
