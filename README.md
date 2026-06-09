@@ -72,6 +72,18 @@ graph TD
 - **Monitoring**: Prometheus scrape + Grafana for operator health and AVS metrics
 - **Deployment flow**: `docker compose up`; `kubectl apply -f k8s/` ; integrate with validator ops platforms
 
+## Key Engineering Decisions
+
+- avs-operator exposed on dedicated 8080 port with sidecar Prometheus/Grafana so health and metrics are available without touching validator binaries (docker-compose.yml and k8s/avs-deployment.yaml).
+- Minimal Deployment (1 replica, basic image) to serve as starting pattern for co-located AVS operator + obs.
+- Compose and k8s kept in sync for local validation before cluster rollout.
+
+## Production Considerations
+
+- avs-operator image in compose/k8s must be replaced with real built image.
+- Add resource requests/limits and liveness probes for the operator container in prod.
+- Integrate operator metrics into existing validator Grafana dashboards.
+
 ## Technology Stack
 
 - **Operator**: avs-operator container
@@ -155,7 +167,7 @@ See docs/runbook.md for integration notes.
 - Full validator + AVS co-deployment reference
 - Production metrics and alerting rules
 
-## Business Value
+## Business Impact
 
 Enables teams running validators to extend into AVS/DA with minimal new infrastructure. Sidecar monitoring pattern reuses existing obs stack. Provides starting point for operator health and metrics without full custom development. Supports faster experimentation and productionization of validated services.
 
