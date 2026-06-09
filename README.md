@@ -1,6 +1,10 @@
 # platform-avs-infrastructure
 
+<p align="center">
+
 **Production-inspired Reference Infrastructure Patterns for AVS Operator and Data Availability Workloads on Kubernetes, demonstrating containerized operator, monitoring sidecar, and observability integration.**
+
+</p>
 
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?logo=kubernetes&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
@@ -30,7 +34,7 @@ Reference Docker Compose and Kubernetes Deployment for AVS operator container (p
 - [Operational Lessons Learned](#operational-lessons-learned)
 - [Screenshots](#screenshots)
 - [Roadmap](#roadmap)
-- [Business Value](#business-value)
+- [Business Impact](#business-impact)
 - [Resume Relevance](#resume-relevance)
 - [License](#license)
 
