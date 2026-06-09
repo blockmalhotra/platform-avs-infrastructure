@@ -1,26 +1,52 @@
 # platform-avs-infrastructure
 
-Reference infrastructure patterns for AVS operator and data availability workloads on Kubernetes, including containerized operator, monitoring sidecar, and observability integration.
+**Production-inspired Reference Infrastructure Patterns for AVS Operator and Data Availability Workloads on Kubernetes, demonstrating containerized operator, monitoring sidecar, and observability integration.**
 
-![MIT License](https://img.shields.io/badge/license-MIT-green)
 ![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?logo=kubernetes&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
 ![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?logo=prometheus&logoColor=white)
 ![Grafana](https://img.shields.io/badge/Grafana-F46800?logo=grafana&logoColor=white)
-![Status](https://img.shields.io/badge/status-in--progress-orange)
-![Version](https://img.shields.io/badge/version-v0.1.0--in--progress-blue)
+![DevOps](https://img.shields.io/badge/DevOps-2496ED)
+![MIT License](https://img.shields.io/badge/license-MIT-green)
+![Status: In Progress](https://img.shields.io/badge/status-in--progress-orange)
+![Version: v0.1.0-in-progress](https://img.shields.io/badge/version-v0.1.0--in--progress-blue)
 
-**Overview** | [Architecture](#architecture) | [Features](#features) | [Deployment](#deployment) | [Monitoring](#monitoring) | [Security](#security) | [Screenshots](#screenshots)
+## Professional Summary
+
+Reference Docker Compose and Kubernetes Deployment for AVS operator container (port 8080) with Prometheus + Grafana monitoring sidecar. Demonstrates operator + observability co-location. Can integrate with validator operations platforms. Patterns for EigenLayer-style or data availability workloads on k8s.
+
+## Table of Contents
+
+- [Problem Statement](#problem-statement)
+- [Why This Exists](#why-this-exists)
+- [Solution Overview](#solution-overview)
+- [Key Features](#key-features)
+- [Architecture](#architecture)
+- [Technology Stack](#technology-stack)
+- [Repository Structure](#repository-structure)
+- [Deployment Workflow](#deployment-workflow)
+- [Monitoring & Observability](#monitoring--observability)
+- [Security Considerations](#security-considerations)
+- [Operational Lessons Learned](#operational-lessons-learned)
+- [Screenshots](#screenshots)
+- [Roadmap](#roadmap)
+- [Business Value](#business-value)
+- [Resume Relevance](#resume-relevance)
+- [License](#license)
 
 ## Problem Statement
 
 AVS (Actively Validated Services) and data availability layers require dedicated operator processes alongside validators. These workloads need reliable deployment, health exposure, and integrated monitoring on Kubernetes without duplicating full validator stacks.
 
-## Solution
+## Why This Exists
 
-Reference Docker Compose and Kubernetes Deployment manifest an avs-operator container with Prometheus + Grafana sidecar monitoring. The pattern demonstrates operator + observability co-location and can be integrated with validator operations platforms.
+Validator operators expanding into AVS or DA need patterns for co-deployed operators with observability. Standalone operator images require sidecar monitoring and k8s manifests. This provides a minimal, integrable reference.
 
-## Features
+## Solution Overview
+
+Compose runs avs-operator (8080) + Prometheus + Grafana. k8s Deployment manifest for the operator. Architecture diagram. Runbooks. Demonstrates sidecar monitoring pattern for AVS/DA on k8s.
+
+## Key Features
 
 - avs-operator container exposing port 8080
 - Docker Compose with avs-operator + Prometheus + Grafana
@@ -28,13 +54,6 @@ Reference Docker Compose and Kubernetes Deployment manifest an avs-operator cont
 - Architecture diagram (Mermaid)
 - Monitoring stack integration
 - Runbooks and troubleshooting
-
-## Technology Stack
-
-- **Operator**: avs-operator container
-- **Orchestration**: Kubernetes Deployment + Service
-- **Observability**: Prometheus + Grafana
-- **Packaging**: Docker Compose
 
 ## Architecture
 
@@ -53,16 +72,12 @@ graph TD
 - **Monitoring**: Prometheus scrape + Grafana for operator health and AVS metrics
 - **Deployment flow**: `docker compose up`; `kubectl apply -f k8s/` ; integrate with validator ops platforms
 
-<details>
-<summary>Show avs-architecture.mmd</summary>
+## Technology Stack
 
-```mermaid
-graph TD
-    O[Operator] --> K[K8s]
-    K --> P[Prom]
-    K --> G[Grafana]
-```
-</details>
+- **Operator**: avs-operator container
+- **Orchestration**: Kubernetes Deployment + Service
+- **Observability**: Prometheus + Grafana
+- **Packaging**: Docker Compose
 
 ## Repository Structure
 
@@ -78,6 +93,36 @@ platform-avs-infrastructure/
 └── ROADMAP.md
 ```
 
+## Deployment Workflow
+
+```bash
+git clone https://github.com/blockmalhotra/platform-avs-infrastructure
+cd platform-avs-infrastructure
+docker compose up
+# Kubernetes
+kubectl apply -f k8s/avs-deployment.yaml
+```
+
+See docs/runbook.md for integration notes.
+
+## Monitoring & Observability
+
+- avs-operator health on exposed port
+- Prometheus + Grafana for operator and AVS-specific metrics
+- Sidecar pattern for co-located observability
+
+## Security Considerations
+
+- No keys or credentials in default manifests
+- CHANGEME values where applicable (see security patterns)
+- See SECURITY.md
+
+## Operational Lessons Learned
+
+- Operator sidecars benefit from the same observability stack as validators for unified dashboards.
+- Keeping the reference minimal (operator + monitoring only) makes integration with existing validator platforms straightforward.
+- Explicit port exposure and Service definitions prevent discovery issues in multi-workload clusters.
+
 ## Screenshots
 
 ### AVS Architecture & Operator
@@ -88,38 +133,6 @@ platform-avs-infrastructure/
 ### Monitoring
 
 ![Monitoring Stack](screenshots/monitoring-stack.png)
-
-## Deployment
-
-```bash
-git clone https://github.com/blockmalhotra/platform-avs-infrastructure
-cd platform-avs-infrastructure
-docker compose up
-
-# Kubernetes
-kubectl apply -f k8s/avs-deployment.yaml
-```
-
-See docs/runbook.md for integration notes.
-
-## Monitoring
-
-- avs-operator health on exposed port
-- Prometheus + Grafana for operator and AVS-specific metrics
-- Sidecar pattern for co-located observability
-
-## Security
-
-- No keys or credentials in default manifests
-- CHANGEME values where applicable (see security patterns)
-- See SECURITY.md
-
-## CI/CD
-
-`.github/workflows/ci.yml`:
-
-- validate: compose config
-- build: docker validation
 
 ## Roadmap
 
@@ -142,11 +155,19 @@ See docs/runbook.md for integration notes.
 - Full validator + AVS co-deployment reference
 - Production metrics and alerting rules
 
-## Lessons Learned
+## Business Value
 
-- Operator sidecars benefit from the same observability stack as validators for unified dashboards.
-- Keeping the reference minimal (operator + monitoring only) makes integration with existing validator platforms straightforward.
-- Explicit port exposure and Service definitions prevent discovery issues in multi-workload clusters.
+Enables teams running validators to extend into AVS/DA with minimal new infrastructure. Sidecar monitoring pattern reuses existing obs stack. Provides starting point for operator health and metrics without full custom development. Supports faster experimentation and productionization of validated services.
+
+## Resume Relevance
+
+This repository demonstrates practical experience with:
+
+- Kubernetes Operations (Deployment, Service, sidecar patterns)
+- Observability Integration (Prometheus + Grafana for operators)
+- Blockchain Infrastructure Patterns (AVS/DA operator co-location)
+- Production Troubleshooting (runbooks, minimal ref for integration)
+- DevOps Tooling (Docker, Compose, CI)
 
 ## License
 
@@ -154,4 +175,4 @@ MIT License. See [LICENSE](LICENSE).
 
 ---
 
-**Reference implementation and learning project. Not production deployment.**
+Reference implementation. Evidence from repository code and manifests only. No specific EigenLayer/EigenDA/Avail/Espresso implementations present.
